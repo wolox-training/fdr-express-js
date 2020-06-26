@@ -1,3 +1,4 @@
 const axios = require('axios');
+const config = require('../../config');
 
-exports.getRandomQuote = () => axios.get(`${process.env.WITTER_API}/quotes/random`);
+exports.getRandomQuote = () => axios.get(`${config.quoteApi.baseUrl}/quotes/random`);
