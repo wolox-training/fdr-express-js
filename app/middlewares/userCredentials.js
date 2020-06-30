@@ -12,13 +12,13 @@ const validatePassword = password => {
   return password && regex.test(password) && password.length >= PASSWORD_MIN_LENGTH;
 };
 
-module.exports.validate = (req, _, next) => {
+exports.validate = (req, _, next) => {
   if (!validateEmail(req.body.email)) {
-    throw errors.emailError();
+    return next(errors.emailError());
   }
 
   if (!validatePassword(req.body.password)) {
-    throw errors.passwordError();
+    return next(errors.passwordError());
   }
 
   return next();
