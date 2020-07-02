@@ -11,8 +11,8 @@ const bodyUser = (firstName, lastName, email, password) => ({
   password
 });
 
-describe('UserController', () => {
-  describe('SignUp', () => {
+describe('user controller', () => {
+  describe('POST /users', () => {
     it('Should create a user without errors', () =>
       request
         .post('/users')
@@ -49,6 +49,7 @@ describe('UserController', () => {
             .post('/users')
             .send(bodyUser('Test', 'Testing', 'test@wolox.com.ar', 'A12345678'))
             .then(response => {
+              expect(response.statusCode).toEqual(500);
               expect(response.body).toHaveProperty('internal_code', 'database_error');
             })
         );
@@ -67,6 +68,7 @@ describe('UserController', () => {
         .post('/users')
         .send(bodyUser('Test', 'Testing', 'test@wolox.com.ar', 'A12'))
         .then(response => {
+          expect(response.statusCode).toEqual(500);
           expect(response.body).toHaveProperty('internal_code', 'invalid_password');
         }));
 
@@ -75,6 +77,7 @@ describe('UserController', () => {
         .post('/users')
         .send(bodyUser('Test', null, null, '12345678'))
         .then(response => {
+          expect(response.statusCode).toEqual(500);
           expect(response.body).toHaveProperty('internal_code', 'invalid_email');
         });
     });
