@@ -13,3 +13,15 @@ exports.signUp = (req, res, next) =>
       logger.info(`User cannot be created: ${util.inspect(err)}`);
       next(err);
     });
+
+exports.signIn = (req, res, next) =>
+  usersService
+    .signIn(req.body)
+    .then(token => {
+      logger.info(`User logged: ${req.body.email}`);
+      return res.status(200).send({ token });
+    })
+    .catch(err => {
+      logger.info(`User cannot be logged: ${util.inspect(err)}`);
+      next(err);
+    });
