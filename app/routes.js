@@ -6,4 +6,5 @@ const userCredentialsMiddleware = require('./middlewares/userCredentials');
 exports.init = app => {
   app.get('/health', healthCheck);
   app.post('/users', [userCredentialsMiddleware.validate], userController.signUp);
+  app.post('/users/sessions', [userCredentialsMiddleware.validate], userController.signIn);
 };

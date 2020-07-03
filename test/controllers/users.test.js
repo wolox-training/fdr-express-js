@@ -100,4 +100,51 @@ describe('user controller', () => {
         });
     });
   });
+
+  describe('POST /users/sessions', () => {
+    beforeEach(() =>
+      request.post('/users').send({
+        first_name: 'Test',
+        last_name: 'Testing',
+        email: 'test@wolox.com.ar',
+        password: 'A12345678'
+      })
+    );
+
+    it('Should sign in a user without errors', () =>
+      request
+        .post('/users/sessions')
+        .send({
+          email: 'test@wolox.com.ar',
+          password: 'A12345678'
+        })
+        .then(response => {
+          expect(response.statusCode).toEqual(200);
+          expect(response.body).toHaveProperty('token');
+        }));
+
+    it('Should not sign when is not a wolox domain email', () =>
+      request
+        .post('/users/sessions')
+        .send({
+          email: 'test@test.com.ar',
+          password: 'A12345678'
+        })
+        .then(response => {
+          expect(response.statusCode).toEqual(500);
+          expect(response.body).toHaveProperty('internal_code', 'invalid_email');
+        }));
+
+    it('Should not sign when is the password is wrong', () =>
+      request
+        .post('/users/sessions')
+        .send({
+          email: 'test@wolox.com.ar',
+          password: 'incorrect12'
+        })
+        .then(response => {
+          expect(response.statusCode).toEqual(500);
+          expect(response.body).toHaveProperty('internal_code', 'invalid_credentials');
+        }));
+  });
 });
